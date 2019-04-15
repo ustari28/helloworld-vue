@@ -7,8 +7,9 @@
         </thead>
         <tbody>
             <tr v-for="piece in searchNews" :key="piece.idx">
-                <td>{{ piece.idx }}</td>
-                <td>{{ piece.title }}</td>
+                <td>{{ piece.idx }} / </td>
+                <td>{{ piece.title }} / </td>
+                <td>{{ piece.date }}</td>
             </tr>
         </tbody>
     </table>
@@ -26,8 +27,12 @@ export default Vue.extend({
       // la agrego a la vista para que sea reactiva y verifique su cambio
       searchNews: function() {
           console.log('searching news')
-          //this.$http.
-          this.news.push({idx: this.counter, title: 'Date ' + new Date})
+          this.$http.get('http://127.0.0.1:8090/news').then(response => {
+            this.news = response.body
+          }, error => {
+              console.log('error')
+          })
+          //this.news.push({idx: this.counter, title: 'Date ' + new Date})
           return this.news
       }
   },
