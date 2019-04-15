@@ -8,11 +8,6 @@
                     </form>              
                 </th>
             </tr>
-            <tr>
-                <th>
-                    <span>Columns</span>
-                </th>
-            </tr>
         </thead>
         <tbody>
             <tr v-for="heroe in filteredHeroes" :key="heroe.name">
@@ -55,7 +50,7 @@ export default Vue.extend({
     computed: {
         filteredHeroes: function() {
             var v_search = this.search.toLowerCase();
-            var searchHeroes = this.heroes;            
+            var searchHeroes = this.heroes;
             if (v_search) {
                 console.log('filtrando');
                 searchHeroes = searchHeroes.filter(r => {

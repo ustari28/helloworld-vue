@@ -1,0 +1,43 @@
+<template>
+    <table>
+        <thead>
+            <th>
+                News
+            </th>
+        </thead>
+        <tbody>
+            <tr v-for="piece in searchNews" :key="piece.idx">
+                <td>{{ piece.idx }}</td>
+                <td>{{ piece.title }}</td>
+            </tr>
+        </tbody>
+    </table>
+</template>
+
+<script lang="ts">
+import Vue from 'vue';
+export default Vue.extend({
+  name: 'evet-list-component',
+  data: () => ({
+      counter: 1,
+      news: []
+  }),
+  computed: {
+      // la agrego a la vista para que sea reactiva y verifique su cambio
+      searchNews: function() {
+          console.log('searching news')
+          //this.$http.
+          this.news.push({idx: this.counter, title: 'Date ' + new Date})
+          return this.news
+      }
+  },
+  mounted() {
+      //this.searchNews
+      console.log('creating event-list-component')
+      setInterval(function() {
+          // modifico esta propiedad para que se evalue searchNews
+          this.counter+=1
+      }.bind(this), 5000)
+  }
+});
+</script>

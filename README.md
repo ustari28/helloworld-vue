@@ -1,4 +1,4 @@
-# hello2
+# Hello World
 
 ## Project setup
 ```
