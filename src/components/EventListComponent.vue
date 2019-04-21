@@ -39,11 +39,11 @@ export default Vue.extend({
   mounted() {
       //this.searchNews
       console.log('creating event-list-component')
-      setInterval(function() {
+      /**setInterval(function() {
           // modifico esta propiedad para que se evalue searchNews
           this.counter+=1
           this.searchNews
-      }.bind(this), 10000)
+      }.bind(this), 10000)*/
   }
 });
 </script>
