@@ -1,9 +1,10 @@
 <template>
     <table>
         <thead>
-            <th>
-                News
-            </th>
+            <tr>
+                <td>News</td>
+                <td><button v-on:click="searchNews">Request News</button></td>
+            </tr>
         </thead>
         <tbody>
             <tr v-for="piece in news" :key="piece.idx">
@@ -23,7 +24,7 @@ export default Vue.extend({
       counter: 1,
       news: []
   }),
-  computed: {
+  methods: {
       // la agrego a la vista para que sea reactiva y verifique su cambio
       searchNews: function() {
           console.log('searching news')

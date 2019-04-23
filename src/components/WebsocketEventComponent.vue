@@ -11,7 +11,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="m in messages" :key="m.idx">
-                        <td>{{ m.tittle }}</td>
+                        <td>{{ m.title }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -20,51 +20,49 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-//import SockJS from 'sockjs';
-//import Stomp from 'stomp';
-//var SockJS = require('sockjs')
+import Vue from 'vue'
+var StompJs = require('@stomp/stompjs')
+import * as SockJS from 'sockjs-client'
+
 export default Vue.extend({
     name: 'websocket-component',
     data: () => ({
         message: '',
-        messages: Array()
+        messages: [],
+        stompClient: Object
     }),
     methods: {
         sendMessage: function() {
+            console.log('enviando mensaje=>' + this.message)
             const idx = Math.floor(Math.random() * 1000)
-            this.$socket.emit('SEND_MESSAGE', {idx: idx, title: this.message})
-            //this.stompClient.send("/app/hello", {}, 
-            //      JSON.stringify({idx: idx, title: this.message}));
-            /** this.$http.post('http://localhost:8090/app/hello', {idx: idx, title: this.message})
-            .then(success => {
-                console.log('éxito')
-            }
-            , error => {
-                console.log('Error')
-            })*/
+            this.stompClient.publish({destination:'/appws/chat.addUser', body: JSON.stringify({idx: idx, title: this.message})})
         },
-        responseCallback(data, headers){
-            console.log("responseCallback msg=>" + data.body)
+        callbackSub: function(success) {
+            console.log('Receiving->' + success.body)
+            this.messages.push(JSON.parse(success.body))
         },
-        onFailed(frame){
-            console.log('Failed: ' + frame)
+        connectedSocket: function(data) {
+            console.log('Conectando->' + data)
+            this.stompClient.subscribe('/topic/public', this.callbackSub)
         }
-    },
+    },    
     created() {
-        //var socket = new SockJS('http://localhost:8090/gs-guide-websocket')
-        /** this.stompClient = Stomp.over(socket)
-        this.stompClient.connect({}, function(data) {
-            //setConnected(true);
-            console.log('Connected: ' + data);
-            this.stompClient.subscribe('/topic/greetings', function(res) {
-                console.log('Subs -> ' + res)
-            })
-        })*/
-        console.log('creating websocket event')
-        this.sockets.subscribe('/topic/greetings', (data) => {
-            console.log('events->' + data.message)
-        })
+        var stompConfig = {
+            brokerURL: 'ws://127.0.0.1:8090/sockejs',
+            debug: function (str) {
+                console.log(str);
+            },
+            webSocketFactory: function () {
+                // Note that the URL is different from the WebSocket URL 
+                return new SockJS("http://127.0.0.1:8090/sockejs")
+            },
+            onConnect: this.connectedSocket,
+            onDisconnect: function() {
+                console.log("disconnecting")
+            }
+        } 
+        this.stompClient = new StompJs.Client(stompConfig)
+        this.stompClient.activate()
     }
 })
 </script>
