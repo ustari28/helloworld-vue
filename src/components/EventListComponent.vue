@@ -1,9 +1,10 @@
 <template>
     <table>
         <thead>
-            <th>
-                News
-            </th>
+            <tr>
+                <td>News</td>
+                <td><button v-on:click="searchNews">Request News</button></td>
+            </tr>
         </thead>
         <tbody>
             <tr v-for="piece in news" :key="piece.idx">
@@ -23,7 +24,7 @@ export default Vue.extend({
       counter: 1,
       news: []
   }),
-  computed: {
+  methods: {
       // la agrego a la vista para que sea reactiva y verifique su cambio
       searchNews: function() {
           console.log('searching news')
@@ -39,11 +40,11 @@ export default Vue.extend({
   mounted() {
       //this.searchNews
       console.log('creating event-list-component')
-      setInterval(function() {
+      /**setInterval(function() {
           // modifico esta propiedad para que se evalue searchNews
           this.counter+=1
           this.searchNews
-      }.bind(this), 10000)
+      }.bind(this), 10000)*/
   }
 });
 </script>
