@@ -1,0 +1,87 @@
+<template>
+    <div>
+        <b-card v-if="logged === false"
+            header-tag="header" v-bind:style="{display: 'inline-block'}">
+            <h6 slot="header" class="mb-0">Sign in <font-awesome-icon icon="user-tie" size="lg"/></h6>
+            <b-container fluid>
+                <b-row>
+                    <b-col>
+                    <b-form-input v-model="user" placeholder="Type your user name"></b-form-input>
+                    </b-col>
+                    <b-col>
+                    <b-button v-on:click="login">Sign in</b-button>
+                    </b-col>
+                </b-row>
+            </b-container>
+        </b-card>
+        <b-card v-else v-bind:style="{display: 'inline-block'}" header-tag="header">
+            <h6 slot="header" class="mb-0">New task <font-awesome-icon icon="cogs" size="lg"/></h6>
+            <b-container fluid>
+                <b-row class="mb-3">
+                    <b-col>
+                    <b-form-input v-model="title" placeholder="Title task"></b-form-input>
+                    </b-col>
+                </b-row>
+                <b-row class="mb-3">
+                    <b-col>
+                    <b-form-input v-model="description" placeholder="Short description"></b-form-input>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col>
+                        <b-button v-on:click="newTask">Send</b-button>
+                    </b-col>
+                    <b-col>
+                        <b-button v-on:click="logout">Logout</b-button>
+                    </b-col>
+                </b-row>
+            </b-container>
+        </b-card>
+    </div>
+</template>
+<script lang="ts">
+import Vue from 'vue'
+var StompJs = require('@stomp/stompjs')
+import * as SockJS from 'sockjs-client'
+export default Vue.extend({
+    name: 't-processes',
+    data: () => ({
+        user: '',
+        title: '',
+        description: '',
+        logged: false,
+        subscription: Object
+    }),
+    methods: {
+        newTask: function() {
+            console.log('new task')
+        },
+        login: function() {
+            var stompConfig = {
+                brokerURL: 'ws://127.0.0.1:8090/sockejs',
+                debug: function (str) {
+                    console.log(str);
+                },
+                webSocketFactory: function () {
+                    // Note that the URL is different from the WebSocket URL 
+                    return new SockJS("http://127.0.0.1:8090/sockejs")
+                },
+                onConnect: this.connectedSocket,
+                onDisconnect: function() {
+                    console.log("disconnecting")
+                }
+            } 
+            this.stompClient = new StompJs.Client(stompConfig)
+            this.stompClient.activate()
+            this.logged = true
+        },
+        logout: function() {
+            this.subscription.unsubscribe()
+            this.logged = false
+        },
+        connectedSocket: function(data) {
+            this.subscription = this.stompClient.subscribe('/user/' + this.user + '/tasks', this.callbackSub)
+        }
+    }
+})
+</script>

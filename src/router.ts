@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Search from './views/Search.vue'
 import EventList from '@/views/EventList.vue'
+import Processes from '@/views/Processes.vue'
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/events',
       name: 'events',
       component: EventList
+    },
+    {
+      path: '/processes',
+      name: 'processes',
+      component: Processes
     },
     {
       path: '/about',
