@@ -55,6 +55,9 @@ export default Vue.extend({
     methods: {
         newTask: function() {
             console.log('new task')
+            this.stompClient.publish({destination:'/appws/process/new',
+                body: JSON.stringify({title: this.title, description: this.description}),
+                headers: {simpSessionId: this.user}})
         },
         login: function() {
             var stompConfig = {
