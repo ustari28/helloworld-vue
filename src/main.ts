@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 /** font-awesome */
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserTie, faCogs } from '@fortawesome/free-solid-svg-icons'
+import { faUserTie, faCogs, faTasks } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /**
@@ -28,7 +28,7 @@ Vue.filter('formatDate', function(d) {
  */
 Vue.use(VueResource)
 Vue.use(BootstrapVue)
-library.add(faUserTie, faCogs)
+library.add(faUserTie, faCogs, faTasks)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
 new Vue({

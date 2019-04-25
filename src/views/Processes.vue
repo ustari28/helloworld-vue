@@ -37,6 +37,23 @@
                 </b-row>
             </b-container>
         </b-card>
+        <b-card v-if="logged === true" v-bind:style="{display: 'inline-block'}" header-tag="header">
+            <h6 slot="header" class="mb-0">Progress tasks<font-awesome-icon icon="tasks" size="lg"/></h6>
+            <b-container fluid>
+                <b-row v-for="t in copyTasks" :key="t.uuid">
+                    <b-col>
+                        <b-card header-tag="head">
+                            <h6 slot="header" class="mb-0">{{t.title}}</h6>
+                            <b-container>
+                            <b-row><b-col>UUDI: {{t.uuid}}</b-col></b-row>
+                            <b-row><b-col>Description: {{t.description}}</b-col></b-row>
+                            <b-row><b-col>Start: {{t.start | formatDate}}</b-col></b-row>
+                            </b-container>
+                        </b-card>
+                    </b-col>
+                </b-row>
+            </b-container>
+        </b-card>
     </div>
 </template>
 <script lang="ts">
@@ -50,18 +67,20 @@ export default Vue.extend({
         title: '',
         description: '',
         logged: false,
-        subscription: Object
+        subscription: Object,
+        tasks: new Map([]),
+        copyTasks: Array()
     }),
     methods: {
         newTask: function() {
             console.log('new task')
             this.stompClient.publish({destination:'/appws/process/new',
                 body: JSON.stringify({title: this.title, description: this.description}),
-                headers: {simpSessionId: this.user}})
+                headers: {username: this.user}})
         },
         login: function() {
             var stompConfig = {
-                brokerURL: 'ws://127.0.0.1:8090/sockejs',
+                //brokerURL: 'ws://127.0.0.1:8090/sockejs',
                 debug: function (str) {
                     console.log(str);
                 },
@@ -82,8 +101,14 @@ export default Vue.extend({
             this.subscription.unsubscribe()
             this.logged = false
         },
+        fallbackTasks: function(success) {
+            var task = JSON.parse(success.body)
+            this.tasks.set(task.uuid, task)
+            this.copyTasks = this.tasks.values()
+            console.log('new task')
+        },
         connectedSocket: function(data) {
-            this.subscription = this.stompClient.subscribe('/user/' + this.user + '/tasks', this.callbackSub)
+            this.subscription = this.stompClient.subscribe('/user/queue/tasks', this.fallbackTasks)
         }
     }
 })
