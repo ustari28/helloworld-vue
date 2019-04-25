@@ -48,7 +48,10 @@
                             <b-row><b-col>UUDI: {{t.uuid}}</b-col></b-row>
                             <b-row><b-col>Description: {{t.description}}</b-col></b-row>
                             <b-row><b-col>Start: {{t.start | formatDate}}</b-col></b-row>
-                            <b-row><b-col>Percentage: {{t.progress}}</b-col></b-row>
+                            <b-row><b-col>
+                                <b-progress :value="t.progress" variant="info" striped:animated="true"></b-progress>
+                                </b-col>
+                            </b-row>
                             </b-container>
                         </b-card>
                     </b-col>
@@ -103,9 +106,12 @@ export default Vue.extend({
             this.logged = false
         },
         fallbackTasks: function(success) {
+            var current = new Date
+            var msCurrent = current.getMilliseconds()
             var task = JSON.parse(success.body)
-            this.tasks.set(task.uuid, task)
-            this.copyTasks = this.tasks.values()
+            this.tasks.set(task.uuid, task)            
+            this.copyTasks = Array.from(this.tasks.values())
+            this.copyTasks = this.copyTasks.filter(t => {return t.end > msCurrent})
             console.log('new task')
         },
         connectedSocket: function(data) {
