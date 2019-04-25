@@ -48,6 +48,7 @@
                             <b-row><b-col>UUDI: {{t.uuid}}</b-col></b-row>
                             <b-row><b-col>Description: {{t.description}}</b-col></b-row>
                             <b-row><b-col>Start: {{t.start | formatDate}}</b-col></b-row>
+                            <b-row><b-col>Percentage: {{t.progress}}</b-col></b-row>
                             </b-container>
                         </b-card>
                     </b-col>
