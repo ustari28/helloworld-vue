@@ -1,63 +1,74 @@
 <template>
     <div>
-        <b-card v-if="logged === false"
-            header-tag="header" v-bind:style="{display: 'inline-block'}">
-            <h6 slot="header" class="mb-0">Sign in <font-awesome-icon icon="user-tie" size="lg"/></h6>
-            <b-container fluid>
-                <b-row>
-                    <b-col>
-                    <b-form-input v-model="user" placeholder="Type your user name"></b-form-input>
-                    </b-col>
-                    <b-col>
-                    <b-button v-on:click="login">Sign in</b-button>
-                    </b-col>
-                </b-row>
-            </b-container>
-        </b-card>
-        <b-card v-else v-bind:style="{display: 'inline-block'}" header-tag="header">
-            <h6 slot="header" class="mb-0">New task <font-awesome-icon icon="cogs" size="lg"/></h6>
-            <b-container fluid>
-                <b-row class="mb-3">
-                    <b-col>
-                    <b-form-input v-model="title" placeholder="Title task"></b-form-input>
-                    </b-col>
-                </b-row>
-                <b-row class="mb-3">
-                    <b-col>
-                    <b-form-input v-model="description" placeholder="Short description"></b-form-input>
-                    </b-col>
-                </b-row>
-                <b-row>
-                    <b-col>
-                        <b-button v-on:click="newTask">Send</b-button>
-                    </b-col>
-                    <b-col>
-                        <b-button v-on:click="logout">Logout</b-button>
-                    </b-col>
-                </b-row>
-            </b-container>
-        </b-card>
-        <b-card v-if="logged === true" v-bind:style="{display: 'inline-block'}" header-tag="header">
-            <h6 slot="header" class="mb-0">Progress tasks<font-awesome-icon icon="tasks" size="lg"/></h6>
-            <b-container fluid>
-                <b-row v-for="t in copyTasks" :key="t.uuid">
-                    <b-col>
-                        <b-card header-tag="head">
-                            <h6 slot="header" class="mb-0">{{t.title}}</h6>
-                            <b-container>
-                            <b-row><b-col>UUDI: {{t.uuid}}</b-col></b-row>
-                            <b-row><b-col>Description: {{t.description}}</b-col></b-row>
-                            <b-row><b-col>Start: {{t.start | formatDate}}</b-col></b-row>
-                            <b-row><b-col>
-                                <b-progress :value="t.progress" variant="info" striped:animated="true"></b-progress>
+        <b-container>
+            <b-row v-if="logged === false">
+                <b-col>
+                    <b-card header-tag="header" v-bind:style="{display: 'inline-block'}">
+                        <h6 slot="header" class="mb-0">Sign in <font-awesome-icon icon="user-tie" size="lg"/></h6>
+                        <b-container fluid>
+                            <b-row>
+                                <b-col>
+                                <b-form-input v-model="user" placeholder="Type your user name"></b-form-input>
+                                </b-col>
+                                <b-col>
+                                <b-button v-on:click="login">Sign in</b-button>
                                 </b-col>
                             </b-row>
-                            </b-container>
-                        </b-card>
-                    </b-col>
-                </b-row>
-            </b-container>
-        </b-card>
+                        </b-container>
+                    </b-card>
+                </b-col>
+            </b-row>
+            <b-row v-else>
+                <b-col>
+                    <b-card v-bind:style="{display: 'inline-block'}" header-tag="header">
+                        <h6 slot="header" class="mb-0">New task <font-awesome-icon icon="cogs" size="lg"/></h6>
+                        <b-container fluid>
+                            <b-row class="mb-3">
+                                <b-col>
+                                <b-form-input v-model="title" placeholder="Title task"></b-form-input>
+                                </b-col>
+                            </b-row>
+                            <b-row class="mb-3">
+                                <b-col>
+                                <b-form-input v-model="description" placeholder="Short description"></b-form-input>
+                                </b-col>
+                            </b-row>
+                            <b-row>
+                                <b-col>
+                                    <b-button v-on:click="newTask">Send</b-button>
+                                </b-col>
+                                <b-col>
+                                    <b-button v-on:click="logout">Logout</b-button>
+                                </b-col>
+                            </b-row>
+                        </b-container>
+                    </b-card>
+                </b-col>
+                <b-col v-if="logged === true && copyTasks.length > 0">
+                    <b-card v-bind:style="{display: 'inline-block'}" header-tag="header">
+                        <h6 slot="header" class="mb-0">Progress tasks<font-awesome-icon icon="tasks" size="lg"/></h6>
+                        <b-container fluid>
+                            <b-row v-for="t in copyTasks" :key="t.uuid">
+                                <b-col>
+                                    <b-card header-tag="head">
+                                        <h6 slot="header" class="mb-0">{{t.title}}</h6>
+                                        <b-container>
+                                        <b-row><b-col>UUDI: {{t.uuid}}</b-col></b-row>
+                                        <b-row><b-col>Description: {{t.description}}</b-col></b-row>
+                                        <b-row><b-col>Start: {{t.start | formatDate}}</b-col></b-row>
+                                        <b-row><b-col>
+                                            <b-progress :value="t.progress" variant="info" striped:animated="true"></b-progress>
+                                            </b-col>
+                                        </b-row>
+                                        </b-container>
+                                    </b-card>
+                                </b-col>
+                            </b-row>
+                        </b-container>
+                    </b-card>
+                </b-col>
+            </b-row>            
+        </b-container>
     </div>
 </template>
 <script lang="ts">
@@ -107,11 +118,12 @@ export default Vue.extend({
         },
         fallbackTasks: function(success) {
             var current = new Date
+            current.setSeconds(current.getSeconds() + 20)
             var msCurrent = current.getMilliseconds()
             var task = JSON.parse(success.body)
             this.tasks.set(task.uuid, task)            
             this.copyTasks = Array.from(this.tasks.values())
-            this.copyTasks = this.copyTasks.filter(t => {return t.end > msCurrent})
+            this.copyTasks = this.copyTasks.filter(t => {return t.end <= msCurrent || t.end == -1})
             console.log('new task')
         },
         connectedSocket: function(data) {
