@@ -53,7 +53,7 @@
                                     <b-card header-tag="head">
                                         <h6 slot="header" class="mb-0">{{t.title}}</h6>
                                         <b-container>
-                                        <b-row><b-col>UUDI: {{t.uuid}}</b-col></b-row>
+                                        <b-row><b-col>Title: {{t.title}}</b-col></b-row>
                                         <b-row><b-col>Description: {{t.description}}</b-col></b-row>
                                         <b-row><b-col>Start: {{t.start | formatDate}}</b-col></b-row>
                                         <b-row><b-col>

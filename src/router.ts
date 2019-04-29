@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import Search from './views/Search.vue'
 import EventList from '@/views/EventList.vue'
 import Processes from '@/views/Processes.vue'
+import Login from '@/views/Login.vue'
 
 Vue.use(Router)
 
@@ -13,6 +14,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     },
     {
       path: '/search',

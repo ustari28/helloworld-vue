@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import VueResource from 'vue-resource'
+import VueI18n from 'vue-i18n'
+import MyMessages from '@/lang/es.json'
 /** bootstrap */
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -28,11 +30,18 @@ Vue.filter('formatDate', function(d) {
  */
 Vue.use(VueResource)
 Vue.use(BootstrapVue)
+Vue.use(VueI18n)
 library.add(faUserTie, faCogs, faTasks)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+var i18n = new VueI18n({
+  locale: 'es',
+  fallbackLocale: 'es',
+  messages: MyMessages
+})
 Vue.config.productionTip = false
 new Vue({
   name: 'main',
+  i18n,
   router,
   render: h => h(App)
 }).$mount('#app')
