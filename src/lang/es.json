@@ -1,0 +1,9 @@
+{
+    "es":{
+        "loginTitle": "Iniciar sesión",
+        "loginButtonSend": "Iniciar",
+        "loginButtonCancel": "Cancelar",
+        "logingUsernamePH": "Escribe tu usuario",
+        "logingPasswordPH": "Escribe tu clave de usuario"
+    }
+}
