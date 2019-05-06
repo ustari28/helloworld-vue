@@ -12,6 +12,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserTie, faCogs, faTasks } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+/** Vuex */
+import store from './store'
 
 /**
  * Requesting modules.
@@ -39,9 +41,11 @@ var i18n = new VueI18n({
   messages: MyMessages
 })
 Vue.config.productionTip = false
+
 new Vue({
   name: 'main',
   i18n,
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')
