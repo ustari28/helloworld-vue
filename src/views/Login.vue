@@ -1,5 +1,5 @@
 <template>
-    <div  v-bind:style="{display: 'inline-block'}">
+    <div  v-bind:style="{display: 'inline-block'}" class="my-5">
         <b-container>
         <b-card header-tag="header" class="mx-3">
             <h3 slot="header">{{ $t('loginTitle') }}</h3>
@@ -41,8 +41,10 @@ export default Vue.extend({
         toUrl: ''
     }),
     methods: {
-        login: function() {
-            console.log('login')
+        login: function() {            
+            console.log('login->'+ this.urlLogin)
+            this.$store.commit('signin', true);
+            this.$router.replace({ path: '/home' });
         },
         cancel: function() {
             console.log('cancel')
