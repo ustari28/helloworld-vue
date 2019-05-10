@@ -29,11 +29,10 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
+import Login from '@/components/Login.ts'
+import {Credentials} from '@/components/Credentials.ts'
 export default Vue.extend({
     name: 'view-login',
-    props: {
-        urlLogin: String
-    },
     data: () => ({
         username: '',
         password: '',
@@ -41,10 +40,15 @@ export default Vue.extend({
         toUrl: ''
     }),
     methods: {
-        login: function() {            
-            console.log('login->'+ this.urlLogin)
-            this.$store.commit('signin', true);
-            this.$router.replace({ path: '/home' });
+        login: function() {
+            var credentials = new Credentials(this.username, this.password)
+            new Login().getToken(credentials).then(success => {
+                this.$store.commit('renewToken', success.body.token)
+                this.$store.commit('signin', true)
+                this.$router.replace({ path: '/home' })
+            }, error => {
+                console.log('Bad credential')
+            })
         },
         cancel: function() {
             console.log('cancel')
