@@ -29,10 +29,16 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import Login from '@/components/Login.ts'
+import {LoginService} from '@/components/LoginService.ts'
 import {Credentials} from '@/components/Credentials.ts'
 export default Vue.extend({
     name: 'view-login',
+    props:{
+        loginService: {
+            type: LoginService,
+            default: () => { return new LoginService()}
+        }
+    },
     data: () => ({
         username: '',
         password: '',
@@ -42,7 +48,7 @@ export default Vue.extend({
     methods: {
         login: function() {
             var credentials = new Credentials(this.username, this.password)
-            new Login().getToken(credentials).then(success => {
+            this.loginService.getToken(credentials).then(success => {
                 this.$store.commit('renewToken', success.body.token)
                 this.$store.commit('signin', true)
                 this.$router.replace({ path: '/home' })

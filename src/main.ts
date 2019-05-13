@@ -4,7 +4,6 @@ import router from './router'
 import VueResource from 'vue-resource'
 import VueI18n from 'vue-i18n'
 import MyMessages from '@/lang/es.json'
-import Vue2Storage from 'vue2-storage'
 /** bootstrap */
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -34,7 +33,6 @@ Vue.filter('formatDate', function(d) {
 Vue.use(VueResource)
 Vue.use(BootstrapVue)
 Vue.use(VueI18n)
-Vue.use(Vue2Storage)
 library.add(faUserTie, faCogs, faTasks)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 var i18n = new VueI18n({
@@ -54,11 +52,13 @@ const vueApp = new Vue({
   store,
   mounted () {
     console.log('mounted')
-    var token = this.$storage.get('token', 'NO')
+    var token = window.localStorage.getItem('token')
     console.log('token => ' + token)
-    if (token != 'NO') { 
-      console.log('updating token')     
+    if (token != 'null') { 
+      console.log('updating token')
       store.commit('renewToken', token)
+      store.commit('signin', true)
+      router.replace({ path: '/home' })
     }
   },
   render: h => h(App)
