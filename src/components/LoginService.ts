@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import HttpResponse from 'vue'
-import {Credentials} from '@/components/Credentials.ts'
+import {Credential} from '@/components/Credentials.ts'
 import store from '../store'
 
 export const LoginService = Vue.extend({
     methods: {
-        getToken(credentials: Credentials): PromiseLike<HttpResponse> {
+        getToken(credentials: Credential): PromiseLike<HttpResponse> {
             return this.$http.post(this.$urlLogin, credentials, {
                 headers: {
                     'content-type': 'application/json;charset=utf-8',

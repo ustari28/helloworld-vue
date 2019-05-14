@@ -30,7 +30,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import {LoginService} from '@/components/LoginService.ts'
-import {Credentials} from '@/components/Credentials.ts'
+import {Credential} from '@/components/Credentials.ts'
 export default Vue.extend({
     name: 'view-login',
     props:{
@@ -47,7 +47,7 @@ export default Vue.extend({
     }),
     methods: {
         login: function() {
-            var credentials = new Credentials(this.username, this.password)
+            const credentials : Credential = {username: this.username, password: this.password}
             this.loginService.getToken(credentials).then(success => {
                 this.$store.commit('renewToken', success.body.token)
                 this.$store.commit('signin', true)
